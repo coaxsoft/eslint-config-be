@@ -20,7 +20,7 @@ module.exports = {
     "globals": {},
     "rules": {
         "prefer-const": "warn",
-        "quotes": ["warn", "double"],
+        "quotes": ["warn", "single"],
         "array-bracket-spacing": ["warn", "never"],
         "array-callback-return": "error",
         "arrow-spacing": "error",
@@ -59,10 +59,6 @@ module.exports = {
             }
         ],
         "init-declarations": "warn",
-        "jsx-quotes": [
-            "warn",
-            "prefer-double"
-        ],
         "key-spacing": [
             "warn",
             {
