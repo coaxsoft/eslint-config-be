@@ -1,15 +1,26 @@
 {
   "name": "@coaxsoft/eslint-config-be",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "COAX Software eslint config for Node.js devs",
-  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "exports": {
+    ".": "./eslint.config.js"
+  },
+  "main": "eslint.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --quiet ./"
+    "lint": "eslint .",
+    "test": "echo \"No tests\" && exit 0"
   },
   "keywords": [
     "eslint",
-    "eslintconfig"
+    "eslintconfig",
+    "flat-config",
+    "eslint9",
+    "node",
+    "nestjs"
   ],
   "author": "COAX Software",
   "license": "ISC",
@@ -18,9 +29,10 @@
     "url": "https://github.com/coaxsoft/eslint-config-be.git"
   },
   "peerDependencies": {
-    "eslint": ">= 8"
+    "eslint": "^9.39.2"
   },
   "dependencies": {
-    "@babel/eslint-parser": "^7.17.0"
+    "globals": "^17.3.0",
+    "@eslint/js": "^9.39.2"
   }
 }
