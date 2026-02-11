@@ -29,7 +29,7 @@
     "url": "https://github.com/coaxsoft/eslint-config-be.git"
   },
   "peerDependencies": {
-    "eslint": "^9.39.2"
+    "eslint": ">=9.39.2 <10"
   },
   "dependencies": {
     "globals": "^17.3.0",

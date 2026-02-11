@@ -90,7 +90,7 @@ Notes on migration from legacy ESLint (<9):
 Adding TypeScript support (including NestJS)
 This package targets JavaScript files by default (js/mjs/cjs). To lint TypeScript in your project, add TypeScript ESLint on top of this base.
 
-Rename your config file to `eslint.config.mjs`,
+If your project is CommonJS (or Node treats `.js` as CommonJS), rename your config file to `eslint.config.mjs` so Node loads it as ESM. If your project is already ESM (for example via `"type": "module"` or using `.mjs`), you can keep using `eslint.config.js`.
 
 Install in your project:
 - npm: `npm i -D typescript typescript-eslint`
