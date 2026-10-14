@@ -40,9 +40,16 @@
   },
   "peerDependencies": {
     "eslint": "^9.0.0 || ^10.0.0",
+    "oxlint": "^1.76.0",
     "typescript": ">=4.8.4 <6.1.0"
   },
   "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    },
+    "oxlint": {
+      "optional": true
+    },
     "typescript": {
       "optional": true
     }
