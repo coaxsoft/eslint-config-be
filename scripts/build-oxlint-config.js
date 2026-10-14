@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Generates oxlint.json from the effective rules of the ESLint presets, so both stay in sync.
+// Generates oxlint.json from the effective rules of the ESLint presets, so both stay in sync, and
+// oxlint-overlap.json: the ESLint rules oxlint already enforces, turned off by the hybrid presets.
 // Run `npm run build:oxlint` after changing rules.js, typescript.js or upgrading a dependency.
 
 const fs = require('node:fs');
@@ -14,7 +15,11 @@ const {
   getOxlintRules,
 } = require('./lib/rules');
 
-const OUTPUT = path.join(__dirname, '..', 'oxlint.json');
+const ROOT = path.join(__dirname, '..');
+const OUTPUTS = {
+  config: path.join(ROOT, 'oxlint.json'),
+  overlap: path.join(ROOT, 'oxlint-overlap.json'),
+};
 
 // Same files as the TypeScript entries in typescript.js.
 const TS_FILES = ['**/*.ts', '**/*.mts', '**/*.cts'];
@@ -34,8 +39,10 @@ const sortKeys = (object) => Object.fromEntries(Object.entries(object).sort(([a]
 
 // Maps one preset's ESLint rules to oxlint rule ids. Several ESLint rules can map to one oxlint rule
 // (`no-shadow` and `@typescript-eslint/no-shadow`): the enabled one wins.
+// Returns the oxlint rules and, per oxlint id, the ESLint rules enabled for it.
 const mapPreset = (rules, oxlintRules, jsPlugins, plugins) => {
   const mapped = {};
+  const eslintNames = {};
 
   for (const [name, setting] of Object.entries(rules)) {
     if (getCategory(name) === 'stylistic' && !KEPT_STYLISTIC.has(name)) {
@@ -58,6 +65,10 @@ const mapPreset = (rules, oxlintRules, jsPlugins, plugins) => {
       plugins.add(native.plugin);
     }
 
+    if (!isOff(value)) {
+      (eslintNames[id] ??= []).push(name);
+    }
+
     if (id in mapped && !isOff(mapped[id])) {
       if (!isOff(value) && JSON.stringify(mapped[id]) !== JSON.stringify(value)) {
         throw new Error(`${name} and another enabled rule both map to ${id} with different settings`);
@@ -68,10 +79,15 @@ const mapPreset = (rules, oxlintRules, jsPlugins, plugins) => {
     mapped[id] = value;
   }
 
-  return mapped;
+  return { mapped, eslintNames };
 };
 
-const buildOxlintConfig = async () => {
+const enabledEslintNames = ({ mapped, eslintNames }) => Object.entries(mapped)
+  .filter(([, value]) => !isOff(value))
+  .flatMap(([id]) => eslintNames[id])
+  .sort();
+
+const build = async () => {
   const effective = await getEffectiveRules();
   const oxlintRules = getOxlintRules();
   const jsPlugins = new Set();
@@ -80,18 +96,18 @@ const buildOxlintConfig = async () => {
   const javascript = mapPreset(effective.javascript, oxlintRules, jsPlugins, plugins);
   const typescript = mapPreset(effective.typescript, oxlintRules, jsPlugins, plugins);
 
-  const rules = Object.fromEntries(Object.entries(javascript).filter(([, value]) => !isOff(value)));
+  const rules = Object.fromEntries(Object.entries(javascript.mapped).filter(([, value]) => !isOff(value)));
   const typescriptRules = {};
 
-  for (const id of new Set([...Object.keys(rules), ...Object.keys(typescript)])) {
-    const value = typescript[id] ?? 'off';
+  for (const id of new Set([...Object.keys(rules), ...Object.keys(typescript.mapped)])) {
+    const value = typescript.mapped[id] ?? 'off';
 
     if (JSON.stringify(value) !== JSON.stringify(rules[id] ?? 'off')) {
       typescriptRules[id] = value;
     }
   }
 
-  return {
+  const config = {
     $schema: `https://unpkg.com/oxlint@${require('oxlint/package.json').version}/configuration_schema.json`,
     categories: ALL_CATEGORIES_OFF,
     plugins: [...plugins].sort(),
@@ -113,16 +129,29 @@ const buildOxlintConfig = async () => {
       },
     ],
   };
+
+  const overlap = {
+    javascript: enabledEslintNames(javascript),
+    typescript: enabledEslintNames(typescript),
+  };
+
+  return { config, overlap };
 };
 
-const serialize = (config) => `${JSON.stringify(config, null, 2)}\n`;
+const serialize = (value) => `${JSON.stringify(value, null, 2)}\n`;
 
 if (require.main === module) {
-  buildOxlintConfig()
-    .then((config) => {
-      fs.writeFileSync(OUTPUT, serialize(config));
-      console.log(`Wrote ${path.relative(process.cwd(), OUTPUT)}: ${Object.keys(config.rules).length} rules, `
+  build()
+    .then((outputs) => {
+      for (const [key, file] of Object.entries(OUTPUTS)) {
+        fs.writeFileSync(file, serialize(outputs[key]));
+      }
+
+      const { config, overlap } = outputs;
+
+      console.log(`oxlint.json: ${Object.keys(config.rules).length} rules, `
         + `${Object.keys(config.overrides[1].rules).length} TypeScript overrides`);
+      console.log(`oxlint-overlap.json: ${overlap.javascript.length} JS / ${overlap.typescript.length} TS ESLint rules`);
     })
     .catch((error) => {
       console.error(error);
@@ -130,4 +159,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { OUTPUT, buildOxlintConfig, serialize };
+module.exports = { OUTPUTS, build, serialize };

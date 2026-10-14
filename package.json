@@ -7,14 +7,19 @@
     ".": "./index.js",
     "./typescript": "./typescript.js",
     "./legacy": "./legacy.js",
-    "./oxlint": "./oxlint.json"
+    "./oxlint": "./oxlint.json",
+    "./with-oxlint": "./with-oxlint.js",
+    "./typescript-with-oxlint": "./typescript-with-oxlint.js"
   },
   "files": [
     "index.js",
     "typescript.js",
     "legacy.js",
     "rules.js",
+    "with-oxlint.js",
+    "typescript-with-oxlint.js",
     "oxlint.json",
+    "oxlint-overlap.json",
     "docs"
   ],
   "scripts": {
