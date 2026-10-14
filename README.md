@@ -109,20 +109,6 @@ Use `@coaxsoft/eslint-config-be/with-oxlint` for JavaScript-only projects.
 }
 ```
 
-## Rules not enforced by oxlint
-
-oxlint enforces 136 of the 183 enabled rules natively, and the 2 `simple-import-sort` rules through a JS plugin. The full table is in [docs/oxlint-rule-mapping.md](docs/oxlint-rule-mapping.md).
-
-Logic rules that only ESLint enforces:
-
-- `consistent-this`, `no-undef-init`: not implemented in oxlint.
-- `dot-notation`: oxlint has it only as a type-aware TypeScript rule.
-- `no-return-await`: deprecated in ESLint.
-- `no-dupe-args`, `no-octal`: oxlint's parser reports these as syntax errors in ESM and TypeScript files, but not in `.cjs` files.
-- `no-restricted-modules`, `no-restricted-syntax`: enabled without options, so they do nothing.
-
-All formatting rules (`indent`, `quotes`, `max-len`, `newline-before-return`, …) are ESLint-only. ESLint has deprecated them all.
-
 ## ESLint 9 and `.eslintrc`
 
 Version 3 requires ESLint 10, which no longer supports `.eslintrc`. For ESLint 9 or the `.eslintrc` format (`@coaxsoft/eslint-config-be/legacy`), use version 2:
