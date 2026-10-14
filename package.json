@@ -10,7 +10,8 @@
   },
   "scripts": {
     "test": "node --test \"test/*.test.js\"",
-    "lint": "node --test \"test/*.test.js\""
+    "lint": "node --test \"test/*.test.js\"",
+    "audit:oxlint": "node scripts/audit-oxlint-rules.js"
   },
   "keywords": [
     "eslint",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "eslint": "^10.12.0",
+    "oxlint": "^1.88.0",
     "typescript": "~6.0.3"
   }
 }
