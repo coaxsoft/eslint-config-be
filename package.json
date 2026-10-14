@@ -9,8 +9,8 @@
     "./legacy": "./legacy.js"
   },
   "scripts": {
-    "test": "node --test",
-    "lint": "node --test"
+    "test": "node --test \"test/*.test.js\"",
+    "lint": "node --test \"test/*.test.js\""
   },
   "keywords": [
     "eslint",
@@ -24,7 +24,7 @@
   },
   "peerDependencies": {
     "eslint": "^9.0.0 || ^10.0.0",
-    "typescript": ">=4.8.4 <6.0.0"
+    "typescript": ">=4.8.4 <6.1.0"
   },
   "peerDependenciesMeta": {
     "typescript": {
@@ -32,13 +32,13 @@
     }
   },
   "dependencies": {
-    "@eslint/js": "^9.22.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "globals": "^11.12.0",
-    "typescript-eslint": "^8.57.2"
+    "@eslint/js": "^9.39.5",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "globals": "^17.13.0",
+    "typescript-eslint": "^8.71.2"
   },
   "devDependencies": {
-    "eslint": "^10.1.0",
-    "typescript": "^5.9.3"
+    "eslint": "^10.12.0",
+    "typescript": "~6.0.3"
   }
 }
