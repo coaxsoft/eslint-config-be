@@ -1,6 +1,6 @@
 {
   "name": "@coaxsoft/eslint-config-be",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "COAX Software eslint config for Node.js devs",
   "main": "index.js",
   "exports": {
