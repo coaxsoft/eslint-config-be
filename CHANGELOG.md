@@ -4,6 +4,8 @@
 
 ### Breaking
 
+- ESLint 10 only: the `eslint` peer is now `^10.0.0`, and `@eslint/js` is upgraded to 10. Its `recommended` set adds `no-unassigned-vars`, `no-useless-assignment` and `preserve-caught-error`; oxlint enforces all three.
+- Removed `./legacy` (`.eslintrc`), because ESLint 10 no longer supports that format. Projects on ESLint 9 or `.eslintrc` can keep using `@coaxsoft/eslint-config-be@^2`.
 - `eslint-plugin-simple-import-sort` 12 → 14. If a file imports the same module more than once in different styles (e.g. `import * as a` plus `import { b }`), or uses string literals as export names, the plugin can report it again. `eslint --fix` / `oxlint --fix` sort these files again.
 
 ### Added
@@ -15,8 +17,8 @@
 
 ### Changed
 
-- `eslint` and the new `oxlint` (`^1.76.0`) are optional peer dependencies.
-- Dependencies upgraded: `typescript-eslint` 8.71, `@eslint/js` 9.39, `globals` 17. The new `globals` adds Node.js globals such as `fetch` and `AbortController`.
+- `eslint` and the new `oxlint` (`^1.76.0`) are optional peer dependencies, so oxlint-only projects don't need ESLint.
+- Dependencies upgraded: `typescript-eslint` 8.71, `globals` 17. The new `globals` adds Node.js globals such as `fetch` and `AbortController`.
 - The published package contains only the presets and docs (`files` allowlist).
 
 ## 2.0.0

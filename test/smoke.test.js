@@ -5,17 +5,11 @@ const { builtinRules } = require('eslint/use-at-your-own-risk');
 const { ESLint } = require('eslint');
 
 const config = require('../index');
-const legacyConfig = require('../legacy');
 const typescriptConfig = require('../typescript');
 
 test('exports a flat config array', () => {
   assert.ok(Array.isArray(config));
   assert.ok(config.length >= 2);
-});
-
-test('legacy export keeps eslintrc shape', () => {
-  assert.equal(typeof legacyConfig, 'object');
-  assert.ok(Array.isArray(legacyConfig.extends));
 });
 
 test('typescript export is a flat config array', () => {

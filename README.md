@@ -6,7 +6,7 @@ Shareable lint config for Node.js projects. Works with ESLint (flat config), wit
 
 | Tool | Version | Needed for |
 | --- | --- | --- |
-| `eslint` | `^9 \|\| ^10` | ESLint and hybrid presets |
+| `eslint` | `^10` | ESLint and hybrid presets |
 | `oxlint` | `^1.76.0` | oxlint and hybrid presets |
 | `typescript` | `>=4.8.4 <6.1.0` | TypeScript presets (TypeScript 7 isn't supported by `typescript-eslint` yet) |
 
@@ -21,7 +21,6 @@ All three are optional peer dependencies: install the ones your project uses.
 | `@coaxsoft/eslint-config-be/oxlint` | oxlint | JS and TS |
 | `@coaxsoft/eslint-config-be/with-oxlint` | ESLint, next to oxlint | JS |
 | `@coaxsoft/eslint-config-be/typescript-with-oxlint` | ESLint, next to oxlint | JS and TS |
-| `@coaxsoft/eslint-config-be/legacy` | ESLint `.eslintrc` | JS |
 
 The ESLint presets include `eslint:recommended`, the shared rules in `rules.js`, `simple-import-sort` and, for TypeScript, `typescript-eslint` recommended. Globals: Node.js and Mocha.
 
@@ -112,7 +111,7 @@ Use `@coaxsoft/eslint-config-be/with-oxlint` for JavaScript-only projects.
 
 ## Rules not enforced by oxlint
 
-oxlint enforces 133 of the 180 enabled rules natively, and the 2 `simple-import-sort` rules through a JS plugin. The full table is in [docs/oxlint-rule-mapping.md](docs/oxlint-rule-mapping.md).
+oxlint enforces 136 of the 183 enabled rules natively, and the 2 `simple-import-sort` rules through a JS plugin. The full table is in [docs/oxlint-rule-mapping.md](docs/oxlint-rule-mapping.md).
 
 Logic rules that only ESLint enforces:
 
@@ -124,16 +123,12 @@ Logic rules that only ESLint enforces:
 
 All formatting rules (`indent`, `quotes`, `max-len`, `newline-before-return`, …) are ESLint-only. ESLint has deprecated them all.
 
-## Legacy usage
+## ESLint 9 and `.eslintrc`
 
-If you still need the `.eslintrc` format (ESLint 9 only), use the legacy subpath:
+Version 3 requires ESLint 10, which no longer supports `.eslintrc`. For ESLint 9 or the `.eslintrc` format (`@coaxsoft/eslint-config-be/legacy`), use version 2:
 
-`.eslintrc.cjs`
-
-```js
-module.exports = {
-  extends: ['@coaxsoft/eslint-config-be/legacy'],
-};
+```sh
+npm install --save-dev @coaxsoft/eslint-config-be@^2
 ```
 
 ## Development

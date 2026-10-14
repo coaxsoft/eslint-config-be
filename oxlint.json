@@ -112,6 +112,7 @@
     "eslint/no-sparse-arrays": "error",
     "eslint/no-template-curly-in-string": "error",
     "eslint/no-this-before-super": "error",
+    "eslint/no-unassigned-vars": "error",
     "eslint/no-undef": "error",
     "eslint/no-undefined": "warn",
     "eslint/no-unexpected-multiline": "error",
@@ -130,6 +131,7 @@
         "functions": false
       }
     ],
+    "eslint/no-useless-assignment": "error",
     "eslint/no-useless-backreference": "error",
     "eslint/no-useless-call": "error",
     "eslint/no-useless-catch": "error",
@@ -143,6 +145,7 @@
     "eslint/prefer-promise-reject-errors": "warn",
     "eslint/prefer-rest-params": "error",
     "eslint/prefer-template": "warn",
+    "eslint/preserve-caught-error": "error",
     "eslint/radix": "warn",
     "eslint/require-yield": "error",
     "eslint/symbol-description": "error",

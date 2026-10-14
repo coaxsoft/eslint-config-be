@@ -11,11 +11,11 @@ options that don't match the rule's schema.
 
 | | logic | stylistic | total |
 | --- | ---: | ---: | ---: |
-| native | 132 | 1 | 133 |
+| native | 135 | 1 | 136 |
 | via JS plugin | 0 | 2 | 2 |
 | native, options rejected | 0 | 0 | 0 |
 | unsupported | 8 | 37 | 45 |
-| **total enabled** | 140 | 40 | 180 |
+| **total enabled** | 143 | 40 | 183 |
 
 Deprecated in ESLint (enabled): 41 — of which stylistic: 37.
 
@@ -169,6 +169,7 @@ Deprecated in ESLint (enabled): 41 — of which stylistic: 37.
 | `no-template-curly-in-string` | error | error | `eslint/no-template-curly-in-string` | native | logic |  |
 | `no-this-before-super` | error | off | `eslint/no-this-before-super` | native | logic |  |
 | `no-trailing-spaces` | warn `[{"skipBlankLines":true}]` | warn `[{"skipBlankLines":true}]` | — | unsupported | stylistic (deprecated) | ESLint: deprecated since v8.53.0; replaced by @stylistic/eslint-plugin → no-trailing-spaces |
+| `no-unassigned-vars` | error | error | `eslint/no-unassigned-vars` | native | logic |  |
 | `no-undef` | error | off | `eslint/no-undef` | native | logic |  |
 | `no-undef-init` | warn | warn | — | unsupported | logic |  |
 | `no-undefined` | warn | warn | `eslint/no-undefined` | native | logic |  |
@@ -184,6 +185,7 @@ Deprecated in ESLint (enabled): 41 — of which stylistic: 37.
 | `no-unused-private-class-members` | error | error | `eslint/no-unused-private-class-members` | native | logic |  |
 | `no-unused-vars` | error | off | `eslint/no-unused-vars` | native | logic |  |
 | `no-use-before-define` | warn `[{"functions":false}]` | off | `eslint/no-use-before-define` | native | logic |  |
+| `no-useless-assignment` | error | error | `eslint/no-useless-assignment` | native | logic |  |
 | `no-useless-backreference` | error | error | `eslint/no-useless-backreference` | native | logic |  |
 | `no-useless-call` | error | error | `eslint/no-useless-call` | native | logic |  |
 | `no-useless-catch` | error | error | `eslint/no-useless-catch` | native | logic |  |
@@ -204,6 +206,7 @@ Deprecated in ESLint (enabled): 41 — of which stylistic: 37.
 | `prefer-rest-params` | error | error | `eslint/prefer-rest-params` | native | logic |  |
 | `prefer-spread` | — | error | `eslint/prefer-spread` | native | logic |  |
 | `prefer-template` | warn | warn | `eslint/prefer-template` | native | logic |  |
+| `preserve-caught-error` | error | error | `eslint/preserve-caught-error` | native | logic |  |
 | `quotes` | warn `["single"]` | warn `["single"]` | — | unsupported | stylistic (deprecated) | ESLint: deprecated since v8.53.0; replaced by @stylistic/eslint-plugin → quotes |
 | `radix` | warn | warn | `eslint/radix` | native | logic |  |
 | `require-yield` | error | error | `eslint/require-yield` | native | logic |  |
