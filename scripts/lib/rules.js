@@ -2,6 +2,8 @@ const { execFileSync } = require('node:child_process');
 const path = require('node:path');
 
 const { ESLint } = require('eslint');
+const { builtinRules } = require('eslint/use-at-your-own-risk');
+const simpleImportSort = require('eslint-plugin-simple-import-sort');
 const tseslint = require('typescript-eslint');
 
 const javascriptConfig = require('../../index');
@@ -95,6 +97,44 @@ const getOxlintRules = () => {
 
 const TS_PREFIX = '@typescript-eslint/';
 
+// ESLint plugins that oxlint runs through `jsPlugins`, keyed by rule prefix.
+const JS_PLUGINS = {
+  'simple-import-sort/': { specifier: 'eslint-plugin-simple-import-sort', plugin: simpleImportSort },
+};
+
+const ALL_CATEGORIES_OFF = Object.fromEntries(
+  ['correctness', 'suspicious', 'pedantic', 'perf', 'style', 'restriction', 'nursery'].map((c) => [c, 'off']),
+);
+
+const findJsPlugin = (eslintName) => {
+  const prefix = Object.keys(JS_PLUGINS).find((p) => eslintName.startsWith(p));
+
+  return prefix ? { prefix, ...JS_PLUGINS[prefix] } : null;
+};
+
+const getMeta = (eslintName) => {
+  if (eslintName.startsWith(TS_PREFIX)) {
+    return tseslint.plugin.rules[eslintName.slice(TS_PREFIX.length)]?.meta || {};
+  }
+
+  const jsPlugin = findJsPlugin(eslintName);
+
+  if (jsPlugin) {
+    return jsPlugin.plugin.rules[eslintName.slice(jsPlugin.prefix.length)]?.meta || {};
+  }
+
+  return builtinRules.get(eslintName)?.meta || {};
+};
+
+// Layout rules, plus rules ESLint deprecated in favour of @stylistic (formatting rules that weren't typed as layout).
+const getCategory = (eslintName) => {
+  const meta = getMeta(eslintName);
+  const movedToStylistic = (meta.deprecated?.replacedBy || [])
+    .some(({ plugin }) => plugin?.name === '@stylistic/eslint-plugin');
+
+  return meta.type === 'layout' || movedToStylistic ? 'stylistic' : 'logic';
+};
+
 const isTypeScriptExtensionRule = (eslintName) => {
   const rule = tseslint.plugin.rules[eslintName.slice(TS_PREFIX.length)];
 
@@ -128,9 +168,14 @@ const findOxlintRule = (eslintName, oxlintRules) => {
 };
 
 module.exports = {
+  ALL_CATEGORIES_OFF,
+  JS_PLUGINS,
   OXLINT_BIN,
   TS_PREFIX,
+  findJsPlugin,
   findOxlintRule,
+  getCategory,
   getEffectiveRules,
+  getMeta,
   getOxlintRules,
 };

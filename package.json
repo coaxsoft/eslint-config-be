@@ -6,12 +6,22 @@
   "exports": {
     ".": "./index.js",
     "./typescript": "./typescript.js",
-    "./legacy": "./legacy.js"
+    "./legacy": "./legacy.js",
+    "./oxlint": "./oxlint.json"
   },
+  "files": [
+    "index.js",
+    "typescript.js",
+    "legacy.js",
+    "rules.js",
+    "oxlint.json",
+    "docs"
+  ],
   "scripts": {
     "test": "node --test \"test/*.test.js\"",
     "lint": "node --test \"test/*.test.js\"",
-    "audit:oxlint": "node scripts/audit-oxlint-rules.js"
+    "audit:oxlint": "node scripts/audit-oxlint-rules.js",
+    "build:oxlint": "node scripts/build-oxlint-config.js"
   },
   "keywords": [
     "eslint",

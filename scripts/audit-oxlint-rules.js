@@ -7,38 +7,21 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 
-const { builtinRules } = require('eslint/use-at-your-own-risk');
-const tseslint = require('typescript-eslint');
-const simpleImportSort = require('eslint-plugin-simple-import-sort');
-
 const {
+  ALL_CATEGORIES_OFF,
   OXLINT_BIN,
   TS_PREFIX,
+  findJsPlugin,
   findOxlintRule,
+  getCategory,
   getEffectiveRules,
+  getMeta,
   getOxlintRules,
 } = require('./lib/rules');
 
 const OUTPUT = path.join(__dirname, '..', 'docs', 'oxlint-rule-mapping.md');
-const JS_PLUGINS = {
-  'simple-import-sort/': { specifier: 'eslint-plugin-simple-import-sort', plugin: simpleImportSort },
-};
 
 const oxlintVersion = require('oxlint/package.json').version;
-
-const getMeta = (name) => {
-  if (name.startsWith(TS_PREFIX)) {
-    return tseslint.plugin.rules[name.slice(TS_PREFIX.length)]?.meta;
-  }
-
-  const jsPlugin = Object.keys(JS_PLUGINS).find((prefix) => name.startsWith(prefix));
-
-  if (jsPlugin) {
-    return JS_PLUGINS[jsPlugin].plugin.rules[name.slice(jsPlugin.length)]?.meta;
-  }
-
-  return builtinRules.get(name)?.meta;
-};
 
 const formatSetting = (setting) => {
   if (!setting) {
@@ -87,10 +70,6 @@ const runOxlint = (dir, config, source = '', file = 'probe.ts') => {
     encoding: 'utf8',
   });
 };
-
-const ALL_CATEGORIES_OFF = Object.fromEntries(
-  ['correctness', 'suspicious', 'pedantic', 'perf', 'style', 'restriction', 'nursery'].map((c) => [c, 'off']),
-);
 
 // oxlint refuses to start when a rule's options don't match its schema, so loading a config
 // with exactly our options tells us whether they are accepted.
@@ -157,21 +136,19 @@ const main = async () => {
   const rows = withTempDir((dir) => names.map((name) => {
     const js = effective.javascript[name];
     const ts = effective.typescript[name];
-    const meta = getMeta(name) || {};
+    const meta = getMeta(name);
     const enabled = [js, ts].some((setting) => setting && setting.severity !== 'off');
-    const movedToStylistic = (meta.deprecated?.replacedBy || [])
-      .some(({ plugin }) => plugin?.name === '@stylistic/eslint-plugin');
-    const category = meta.type === 'layout' || movedToStylistic ? 'stylistic' : 'logic';
+    const category = getCategory(name);
     const deprecation = describeDeprecation(meta.deprecated);
     const notes = [];
     let support;
     let oxlintId = '—';
 
-    const jsPluginPrefix = Object.keys(JS_PLUGINS).find((prefix) => name.startsWith(prefix));
+    const jsPlugin = findJsPlugin(name);
     const match = findOxlintRule(name, oxlintRules);
 
-    if (jsPluginPrefix) {
-      const { specifier } = JS_PLUGINS[jsPluginPrefix];
+    if (jsPlugin) {
+      const { specifier } = jsPlugin;
 
       support = probeJsPlugin(dir, name, specifier) ? 'via JS plugin' : 'unsupported';
       oxlintId = name;
