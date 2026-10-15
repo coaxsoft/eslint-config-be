@@ -1,16 +1,30 @@
 {
   "name": "@coaxsoft/eslint-config-be",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "COAX Software eslint config for Node.js devs",
   "main": "index.js",
   "exports": {
     ".": "./index.js",
     "./typescript": "./typescript.js",
-    "./legacy": "./legacy.js"
+    "./oxlint": "./oxlint.json",
+    "./with-oxlint": "./with-oxlint.js",
+    "./typescript-with-oxlint": "./typescript-with-oxlint.js"
   },
+  "files": [
+    "index.js",
+    "typescript.js",
+    "rules.js",
+    "with-oxlint.js",
+    "typescript-with-oxlint.js",
+    "oxlint.json",
+    "oxlint-overlap.json",
+    "docs"
+  ],
   "scripts": {
-    "test": "node --test",
-    "lint": "node --test"
+    "test": "node --test \"test/*.test.js\"",
+    "lint": "node --test \"test/*.test.js\"",
+    "audit:oxlint": "node scripts/audit-oxlint-rules.js",
+    "build:oxlint": "node scripts/build-oxlint-config.js"
   },
   "keywords": [
     "eslint",
@@ -23,22 +37,30 @@
     "url": "https://github.com/coaxsoft/eslint-config-be.git"
   },
   "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0",
-    "typescript": ">=4.8.4 <6.0.0"
+    "eslint": "^10.0.0",
+    "oxlint": "^1.76.0",
+    "typescript": ">=4.8.4 <6.1.0"
   },
   "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    },
+    "oxlint": {
+      "optional": true
+    },
     "typescript": {
       "optional": true
     }
   },
   "dependencies": {
-    "@eslint/js": "^9.22.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "globals": "^11.12.0",
-    "typescript-eslint": "^8.57.2"
+    "@eslint/js": "^10.0.1",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "globals": "^17.13.0",
+    "typescript-eslint": "^8.71.2"
   },
   "devDependencies": {
-    "eslint": "^10.1.0",
-    "typescript": "^5.9.3"
+    "eslint": "^10.12.0",
+    "oxlint": "^1.88.0",
+    "typescript": "~6.0.3"
   }
 }
